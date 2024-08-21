@@ -1,12 +1,25 @@
 package com.example.mvvm08012024
 
 import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
+
+    private var edt: EditText? = null
+    private var tv: TextView? = null
+    private var btn: Button? = null
+
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this)[MainViewModel::class.java]
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -15,6 +28,18 @@ class MainActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        edt = findViewById(R.id.edit_text_input)
+        tv = findViewById(R.id.text_view_input)
+        btn = findViewById(R.id.button_show_input)
+
+        tv?.text = viewModel.text
+
+        btn?.setOnClickListener {
+            val input = edt?.text.toString()
+            viewModel.text = input
+            tv?.text = viewModel.text
         }
     }
 }
