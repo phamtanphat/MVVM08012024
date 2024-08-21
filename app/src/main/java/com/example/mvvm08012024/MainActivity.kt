@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
@@ -17,7 +18,11 @@ class MainActivity : AppCompatActivity() {
     private var btn: Button? = null
 
     private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this)[MainViewModel::class.java]
+        ViewModelProvider(this, object : ViewModelProvider.Factory{
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return MainViewModel(this@MainActivity) as T
+            }
+        })[MainViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +45,8 @@ class MainActivity : AppCompatActivity() {
             val input = edt?.text.toString()
             viewModel.text = input
             tv?.text = viewModel.text
+
+            viewModel.printContext()
         }
     }
 }
