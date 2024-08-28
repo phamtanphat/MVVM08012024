@@ -39,14 +39,13 @@ class MainActivity : AppCompatActivity() {
         tv = findViewById(R.id.text_view_input)
         btn = findViewById(R.id.button_show_input)
 
-        tv?.text = viewModel.text
+        viewModel.getTextLiveData().observe(this) {
+            tv?.text = it
+        }
 
         btn?.setOnClickListener {
             val input = edt?.text.toString()
-            viewModel.text = input
-            tv?.text = viewModel.text
-
-            viewModel.printContext()
+            viewModel.setText(input)
         }
     }
 }
